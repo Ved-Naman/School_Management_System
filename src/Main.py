@@ -7,14 +7,14 @@ from database import (
 import sys
 
 def display_menu():
-    """Displays the main menu options to the user"""
+
     print("School Management System (CLI)")
     print("1. Student Management")
     print("2. Teacher Management")
     print("3. Exit")
 
 def student_menu():
-    """Displays the student-specific menu."""
+
     print("\n Student Management ")
     print("1. Add New Student (C)")
     print("2. View All Students (R)")
@@ -24,7 +24,7 @@ def student_menu():
     return input("Enter choice: ")
 
 def teacher_menu():
-    """Displays the teacher-specific menu."""
+
     print("\n Teacher Management ")
     print("1. Add New Teacher (C)")
     print("2. View All Teachers (R)")
@@ -34,35 +34,37 @@ def teacher_menu():
     return input("Enter choice: ")
 
 def display_students(students):
-    """Displays a list of student objects in a readable table format."""
+
     if not students:
         print("\nNo students found in the database. ")
         return
 
+
+
     print("CURRENT STUDENT ROSTER")
-    header = f"{'ID':<8} {'Name':<25} {'Grade':<8} {'Email':<25}"
-    print(header)
+    print("ID | Name | Grade | Email")
+
 
     for student in students:
         row_data = f"{student.student_id:<8} {student.name:<25} {str(student.grade_level):<8} {student.email:<25}"
         print(row_data)
 
 def display_teachers(teachers):
-    """Displays a list of teacher objects in a readable table format."""
+
     if not teachers:
         print("\nNo teachers found in the database. ")
         return
 
     print("CURRENT TEACHER ROSTER")
-    header = f"{'ID':<8} {'Name':<25} {'Subject':<15} {'Email':<25}"
-    print(header)
+    print("ID | Name | Grade | Email")
+
 
     for teacher in teachers:
         row_data = f"{teacher.teacher_id:<8} {teacher.name:<25} {teacher.subject:<15} {teacher.email:<25}"
         print(row_data)
 
 def get_student_data():
-    """Prompts the user for details to create a new Student object."""
+
     print("\nEnter new student details:")
     student_id = input("Student ID (e.g., S101): ").strip()
     name = input("Name: ").strip()
@@ -70,13 +72,18 @@ def get_student_data():
     email = input("Email: ").strip()
     try:
         grade_level = int(input("Grade Level (e.g., 10): ").strip())
+
     except ValueError:
-        print("Invalid Grade Level. Please enter a number.")
+
+        print("Invalid Grade Level. Please re-enter.")
         return None
+
     return Student(student_id, name, phone, email, grade_level)
+tmp = get_all_students()
+
 
 def get_teacher_data():
-    """Prompts the user for details to create a new Teacher object."""
+
     print("\nEnter new teacher details:")
     teacher_id = input("Teacher ID (e.g., T501): ").strip()
     name = input("Name: ").strip()
@@ -86,11 +93,12 @@ def get_teacher_data():
     return Teacher(teacher_id, name, phone, email, subject)
 
 def handle_update_student():
-    """Handles the user workflow for updating a student record."""
+
     student_id = input("Enter Student ID to update (e.g., S101): ").strip()
     student = get_student_by_id(student_id)
     if not student:
         print(f"Error: Student with ID {student_id} not found.")
+
         return
 
     print("\nCurrent Details")
@@ -108,11 +116,12 @@ def handle_update_student():
 
     if update_student(student.student_id, new_name, new_phone, new_email, new_grade):
         print(f"\nStudent ID {student.student_id} updated successfully!")
+
     else:
         print(f"Failed to update student ID {student.student_id}.")
 
 def handle_delete_student():
-    """Handles the user workflow for deleting a student record."""
+
     student_id = input("Enter Student ID to delete (e.g., S101): ").strip()
     student = get_student_by_id(student_id)
     if not student:
@@ -124,13 +133,15 @@ def handle_delete_student():
     if confirm == 'yes':
         if delete_student(student_id):
             print(f"\nStudent ID {student_id} deleted successfully.")
+
         else:
             print(f"Failed to delete student ID {student_id}.")
+
     else:
         print("Delete operation canceled.")
 
 def handle_update_teacher():
-    """Handles the user workflow for updating a teacher record."""
+
     teacher_id = input("Enter Teacher ID to update (e.g., T501): ").strip()
     teacher = get_teacher_by_id(teacher_id)
 
@@ -140,7 +151,10 @@ def handle_update_teacher():
 
     print("\nCurrent Details")
     print(f"ID: {teacher.teacher_id}, Name: {teacher.name}, Subject: {teacher.subject}")
+
     print("\nEnter new values (Leave field blank to keep current value):")
+
+
 
     new_name = input(f"New Name ({teacher.name}): ") or teacher.name
     new_phone = input(f"New Phone ({teacher.phone}): ") or teacher.phone
@@ -154,11 +168,12 @@ def handle_update_teacher():
 
 
 def handle_delete_teacher():
-    """Handles the user workflow for deleting a teacher record."""
+
     teacher_id = input("Enter Teacher ID to delete (e.g., T501): ").strip()
     teacher = get_teacher_by_id(teacher_id)
     if not teacher:
         print(f"Error: Teacher with ID {teacher_id} not found.")
+
         return
 
     confirm = input(f"Are you sure you want to delete teacher {teacher.name} (ID: {teacher_id})? (yes/no): ").lower()
@@ -172,7 +187,7 @@ def handle_delete_teacher():
         print("Delete operation canceled.")
 
 def handle_student_management():
-    """Handles the student management loop."""
+
     while True:
         choice = student_menu()
         if choice == '1':
@@ -183,17 +198,19 @@ def handle_student_management():
         elif choice == '2':
             students_list = get_all_students()
             display_students(students_list)
+
         elif choice == '3':
             handle_update_student()
         elif choice == '4':
+
             handle_delete_student()
         elif choice == '5':
             break
         else:
-            print("Invalid choice. Please try again.")
+            print("Invalid choice. Try again.")
 
 def handle_teacher_management():
-    """Handles the teacher management loop."""
+
     while True:
         choice = teacher_menu()
         if choice == '1':
@@ -214,22 +231,25 @@ def handle_teacher_management():
             print("Invalid choice. Please try again.")
 
 def main():
-    """The main application loop."""
+
     setup_database()
 
     while True:
         display_menu()
-        main_choice = input("Enter choice: ")
+        main_choice = input("Your choice: ")
 
         if main_choice == '1':
             handle_student_management()
         elif main_choice == '2':
             handle_teacher_management()
+
         elif main_choice == '3':
             print("\n👋 Exiting School Management System. Goodbye!")
             sys.exit(0)
+
         else:
-            print("Invalid main menu choice. Please enter 1, 2, or 3.")
+            print("wrong option, try again")
+
 
 if __name__ == '__main__':
     main()

@@ -4,13 +4,13 @@ from models import Student, Teacher
 DATABASE_NAME = "school_management.db"
 
 def get_db_connection():
-    """Establishes a connection to the SQLite database."""
+
     conn = sqlite3.connect(DATABASE_NAME)
     conn.row_factory = sqlite3.Row
     return conn
 
 def create_tables():
-    """Creates the necessary tables (Students and Teachers) if they don't exist."""
+
     conn = get_db_connection()
     cursor = conn.cursor()
 
@@ -40,13 +40,13 @@ def create_tables():
     conn.close()
 
 def setup_database():
-    """Initializes the database and creates tables."""
+
     print(f"Setting up database: {DATABASE_NAME}...")
     create_tables()
     print("Database tables created successfully.")
 
 def add_student(student):
-    """Inserts a new student record into the database (Create)."""
+
     conn = get_db_connection()
     cursor = conn.cursor()
     try:
@@ -57,13 +57,13 @@ def add_student(student):
         conn.commit()
         return True
     except sqlite3.IntegrityError:
-        print(f"Error: Student ID {student.student_id} already exists.")
+        print(f"Error: Student ID {student.student_id} already added earlier.")
         return False
     finally:
         conn.close()
 
 def get_all_students():
-    """Retrieves all student records from the database (Read All)."""
+
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM students ORDER BY student_id")
@@ -80,7 +80,7 @@ def get_all_students():
     return students_list
 
 def get_student_by_id(student_id):
-    """Retrieves a single student record based on their student_id (Read One)."""
+
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM students WHERE student_id = ?", (student_id,))
@@ -94,7 +94,7 @@ def get_student_by_id(student_id):
     return None
 
 def update_student(student_id, new_name, new_phone, new_email, new_grade):
-    """Updates an existing student's details in the database (Update)."""
+
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("""
@@ -109,17 +109,19 @@ def update_student(student_id, new_name, new_phone, new_email, new_grade):
     return rows_affected > 0
 
 def delete_student(student_id):
-    """Deletes a student record based on their student_id (Delete)."""
+
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("DELETE FROM students WHERE student_id = ?", (student_id,))
-    rows_affected = cursor.rowcount
+    changed = cursor.rowcount
+
     conn.commit()
     conn.close()
     return rows_affected > 0
+# print("Debug -> updating student", student_id)
 
 def add_teacher(teacher):
-    """Inserts a new teacher record into the database (Create)."""
+
     conn = get_db_connection()
     cursor = conn.cursor()
     try:
@@ -130,13 +132,13 @@ def add_teacher(teacher):
         conn.commit()
         return True
     except sqlite3.IntegrityError:
-        print(f"Error: Teacher ID {teacher.teacher_id} already exists.")
+        print(f"Error: Teacher ID {teacher.teacher_id} already added before.")
         return False
     finally:
         conn.close()
 
 def get_all_teachers():
-    """Retrieves all teacher records from the database (Read All)."""
+
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM teachers ORDER BY teacher_id")
@@ -153,7 +155,7 @@ def get_all_teachers():
     return teachers_list
 
 def get_teacher_by_id(teacher_id):
-    """Retrieves a single teacher record based on their teacher_id (Read One)."""
+
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM teachers WHERE teacher_id = ?", (teacher_id,))
@@ -167,7 +169,7 @@ def get_teacher_by_id(teacher_id):
     return None
 
 def update_teacher(teacher_id, new_name, new_phone, new_email, new_subject):
-    """Updates an existing teacher's details in the database (Update)."""
+
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("""
@@ -182,7 +184,7 @@ def update_teacher(teacher_id, new_name, new_phone, new_email, new_subject):
     return rows_affected > 0
 
 def delete_teacher(teacher_id):
-    """Deletes a teacher record based on their teacher_id (Delete)."""
+
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("DELETE FROM teachers WHERE teacher_id = ?", (teacher_id,))
